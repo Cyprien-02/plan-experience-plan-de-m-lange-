@@ -29,25 +29,25 @@ X_C(i,:)=Borne_inf_C+((Borne_sup_C-Borne_inf_C)*rand(nb_points,1));
 
 
 Matrice_Donnees(:,:,i)=[[X_A(i,:)'] [X_B(i,:)'] [X_C(i,:)']];
-
+Matrice_Resultats(:,:,i)=rand(nb_points,1);
 end
 
 %end
 
 % trace les nappes
-Matrice_Resultats=rand(nb_points,1);
+
 
 subplot(1,2,1)
 [h,hg,htick]=terplot;
 hlabel=terlabel('SC','BETA','THETA');
 colormap jet
-ternaryc(Matrice_Donnees(:,1),Matrice_Donnees(:,2),Matrice_Donnees(:,3),Matrice_Resultats,'o');
+ternaryc(Matrice_Donnees(:,1,1),Matrice_Donnees(:,2,1),Matrice_Donnees(:,3,1),Matrice_Resultats(:,:,1),'o');
 
 
 subplot(1,2,2)
 colormap jet
 hlabel=terlabel('SC','BETA','THETA');
-tersurf(Matrice_Donnees(:,1),Matrice_Donnees(:,2),Matrice_Donnees(:,3),Matrice_Resultats);
+tersurf(Matrice_Donnees(:,1,1),Matrice_Donnees(:,2,1),Matrice_Donnees(:,3,1),Matrice_Resultats(:,:,1));
 
 
 % [x,y]= ginput (3)
