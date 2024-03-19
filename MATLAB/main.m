@@ -62,28 +62,26 @@ for j=1:1:nb_boucle
     end
 end
 
+%% Autres critères otpimalité
 
+for j=1:1:nb_boucle
 
-% %% D-optimal : on veut determinant max
-% 
-% 
-% determinant = det(X'*X);  % determinant det(X'.X)
-% 
-% 
-% %% A-optimalité : trace matrice minimale
-% 
-% trace = trace(inv(X'*X)); 
-% 
-% %% E-optimalité : minimiser valeur propre max
-% 
-% lambda = eig(inv(X'*X)) ; 
-% 
-% %% G-optimalité : minimise valeur max de la diagonale 
-% 
-% valeur_diag = diag(X*inv(X'*X)*X') ; % valeurs diag
-% max_diag = max(valeur_diag) ;  % max diag
+    X(:,:,j)= Matrice_Donnees(:,:,j) ; % pose X
 
+% D-optimal : on veut determinant max
+determinant(:,:,j) = det(X(:,:,j)'*X(:,:,j));  % determinant det(X'.X)
 
+% A-optimalité : trace matrice minimale
+valeur_trace(:,:,j) = trace(inv(X(:,:,j)'*X(:,:,j))); 
+
+% E-optimalité : minimiser valeur propre max
+lambda(:,:,j) = eig(inv(X(:,:,j)'*X(:,:,j))) ; 
+
+% G-optimalité : minimise valeur max de la diagonale 
+valeur_diag(:,:,j) = diag(X(:,:,j)*(X(:,:,j)'*X(:,:,j))*X(:,:,j)') ; % valeurs diag
+max_diag(:,:,j) = max(valeur_diag(:,:,j)) ;  % max diag
+
+end
 %% Matrice variance/covariance : on veut qu'elle soit diagonale
 
 for j=1:1:nb_boucle
