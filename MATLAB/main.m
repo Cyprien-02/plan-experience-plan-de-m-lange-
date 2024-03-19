@@ -3,7 +3,7 @@ clear
 close all
 format short g
 
-%% A boucler 
+%% Création des points et Matrices
 
 nb_boucle = 10 ; 
 nb_points=10;
@@ -14,28 +14,24 @@ X_C=zeros(nb_boucle,nb_points);
 
 for i = 1:1: nb_boucle
 
-Borne_sup_A=0.4;
-Borne_sup_B=0.3;
-Borne_sup_C=1-Borne_sup_A;
-Borne_inf_A = 0 ; 
-Borne_inf_B=0 ;
-Borne_inf_C=1-Borne_sup_B;
+    Borne_sup_A=0.4;
+    Borne_sup_B=0.3;
+    Borne_sup_C=1-Borne_sup_A;
+    Borne_inf_A = 0 ;
+    Borne_inf_B=0 ;
+    Borne_inf_C=1-Borne_sup_B;
 
 
-X_A(i,:)=Borne_inf_A+((Borne_sup_A-Borne_inf_A)*rand(nb_points,1));
-X_B(i,:)=Borne_inf_B+((Borne_sup_B-Borne_inf_B)*rand(nb_points,1));
-X_C(i,:)=Borne_inf_C+((Borne_sup_C-Borne_inf_C)*rand(nb_points,1));
+    X_A(i,:)=Borne_inf_A+((Borne_sup_A-Borne_inf_A)*rand(nb_points,1));
+    X_B(i,:)=Borne_inf_B+((Borne_sup_B-Borne_inf_B)*rand(nb_points,1));
+    X_C(i,:)=Borne_inf_C+((Borne_sup_C-Borne_inf_C)*rand(nb_points,1));
 
+    Matrice_Donnees(:,:,i)=[X_A(i,:)' X_B(i,:)' X_C(i,:)'];
+    Matrice_Resultats(:,:,i)=rand(nb_points,1);
 
-
-Matrice_Donnees(:,:,i)=[[X_A(i,:)'] [X_B(i,:)'] [X_C(i,:)']];
-Matrice_Resultats(:,:,i)=rand(nb_points,1);
 end
 
-%end
-
-% trace les nappes
-
+%% Trace les nappes (pas de boucle avec sinon trop de subplot)
 
 subplot(1,2,1)
 [h,hg,htick]=terplot;
@@ -50,21 +46,21 @@ hlabel=terlabel('SC','BETA','THETA');
 tersurf(Matrice_Donnees(:,1,1),Matrice_Donnees(:,2,1),Matrice_Donnees(:,3,1),Matrice_Resultats(:,:,1));
 
 
-% [x,y]= ginput (3)
+% [x,y]= ginput (3) % recupère les x,y quand on clique 
 
 
 
 %% erreur de prediction
 
-X=Matrice_Donnees ; % pose X
-for j = 1:1:nb_boucle
-for i = 1:1:nb_points
-erreur_prediction(i,j) = sqrt((X(i,:))*inv(X'*X)*X(i,:)'); % prediction
-ecart(j) = max(erreur_prediction(:,j))-min(erreur_prediction(:,j)); % ecart 
+for j=1:1:nb_boucle
 
-end
-end
+    X(:,:,j)= Matrice_Donnees(:,:,j) ; % pose X
 
+    for i = 1:1:nb_points
+        erreur_prediction(i,1,j) = sqrt((X(i,:,j))*inv(X(:,:,j)'*X(:,:,j))*X(i,:,j)'); % prediction
+        ecart(1,1,j) = max(erreur_prediction(:,1,j))-min(erreur_prediction(:,1,j)); % ecart
+    end
+end
 
 
 
@@ -88,15 +84,15 @@ end
 % max_diag = max(valeur_diag) ;  % max diag
 
 
-%% Matrice diagonale
-
-%for i= 1:1:nb_boucle
-X=Matrice_Donnees ; % pose X
-variance_covariance = inv(X'*X) ; 
-diagonale= diag(variance_covariance) ; 
-ecart_diagonale = max(diagonale)-min(diagonale)
-if ecart_diagonale == 0
-    disp('la matrice est diagonale')
-else
-    disp("la matrice n'est pas diagonale")
-end
+% %% Matrice diagonale
+% 
+% %for i= 1:1:nb_boucle
+% X=Matrice_Donnees ; % pose X
+% variance_covariance = inv(X'*X) ; 
+% diagonale= diag(variance_covariance) ; 
+% ecart_diagonale = max(diagonale)-min(diagonale)
+% if ecart_diagonale == 0
+%     disp('la matrice est diagonale')
+% else
+%     disp("la matrice n'est pas diagonale")
+% end
