@@ -84,20 +84,22 @@ end
 % max_diag = max(valeur_diag) ;  % max diag
 
 
-%% Matrice diagonale
+%% Matrice variance/covariance : on veut qu'elle soit diagonale
 
 for j=1:1:nb_boucle
 
     X(:,:,j)= Matrice_Donnees(:,:,j) ; % pose X
-
     matrice_variance_covariance(:,:,j) = inv(X(:,:,j)'*X(:,:,j)) ; % matrice qu'on veut diagonale
     diagonale(:,:,j) = diag(matrice_variance_covariance(:,:,j)) ; % recup les diags
     ecart_diagonale(1,1,j) = max(diagonale(:,:,j))-min(diagonale(:,:,j)); % ecart entre les chiffres des diags
-    ecart_type_diag(1,1,j) = std(diagonale(:,:,j)) ; 
+    ecart_type_diag(1,1,j) = std(diagonale(:,:,j)) ; % ecart-type de la diagonale
+    
+    if ecart_type_diag == 0
+        disp('la matrice est diagonale')
+    else
+        disp("la matrice n'est pas diagonale")
+    end
+
 end
 
-if ecart_type_diag == 0
-    disp('la matrice est diagonale')
-else
-    disp("la matrice n'est pas diagonale")
-end
+
