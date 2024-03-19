@@ -57,7 +57,7 @@ max_diag = max(valeur_diag) ;  % max diag
 %% erreur de prediction
 
 for i = 1:1:nb_points
-erreur_prediction = sqrt((X(i,:))*inv(X'*X)*X(i,:)');
+erreur_prediction(i) = sqrt((X(i,:))*inv(X'*X)*X(i,:)');
 end
 
 
