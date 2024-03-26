@@ -92,22 +92,18 @@ tersurf(B(:,1),B(:,2),B(:,3),Rep);
 
 
 % 10 points en ligne , boucle rajoute une ligne de points
-X_A=zeros(nb_boucle,nb_points); 
-X_B=zeros(nb_boucle,nb_points);
-X_C=zeros(nb_boucle,nb_points);
 
 M=zeros(nb_points,3);
 for i = 1:1: nb_boucle
-    
-    M(:,1)=rand(nb_points,1)*(m_b(1)-m_a(1))+m_a(1);
-    k_1=max(a(2),1-M(:,1)-m_b(3)); % à priori toujours a(2) ??? bizarre
-    k_2=min(b(2),1-M(:,1)-m_a(3));
-    M(:,2)=rand(nb_points,1).*(k_2-k_1)+k_1;
-    M(:,3)=1-M(:,1)-M(:,2);
+
+    for j=1:1:nb_points
+        M(j,:)=nouveau_point(m_a,m_b,a,b);
+    end
     Matrice_Donnees(:,:,i)=M;
     Matrice_Resultats(:,:,i)=rand(nb_points,1);
 
 end
+
 
 %% Trace les nappes (pas de boucle avec sinon trop de subplot)
 subplot(2,2,3)
@@ -194,24 +190,26 @@ Matrice_Donnees_triee = trie_matrice_donnees(nb_boucle,ecart_type_diagonale(nb_b
 %% Optimisation
 
 %% Algorithme génétique
-% G = 500;
-% N=10; % nb_points
-% E = 2; % élites retenues
-% PMUTATION = 0.5;
-% BMUTATION = 0.8;
-% PCROISEMENT = 1;
-% pop=Matrice_Donnees(:,:,:);
-% for generation=1:G
-%     pop_croisee = reproduction(pop,selectionElite(pop,N,E),N,E,PCROISEMENT);
-%     pop_mutee = mutation(pop_croisee,N,E,PMUTATION,BMUTATION);
-%     pop = evaluationFitness(pop_mutee);
-%     imagesc(X,Y,Z)
-%     colormap jet
-%     hold on
-%     plot(pop(:,1),pop(:,2),'w*')
-%     pause(0.01)
-%     hold off
-% end
+G = 500;
+N=10; % nb_points
+E = 2; % élites retenues
+PMUTATION = 0.5;
+BMUTATION = 0.05;
+PCROISEMENT = 1;
+pop=Matrice_Donnees(:,:,:);
+for generation=1:G
+
+    pop_croisee = reproduction(selectionElite(pop,N,E),N,E,PCROISEMENT);
+    pop_mutee = mutation(pop_croisee,N,E,PMUTATION,m_a,m_b,a,b);
+
+    pop = evaluationFitness(pop_mutee);
+    imagesc(X,Y,Z)
+    colormap jet
+    hold on
+    plot(pop(:,1),pop(:,2),'w*')
+    pause(0.01)
+    hold off
+end
 % 
 % %% Conclusion
 % pop(1,1:2)
